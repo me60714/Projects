@@ -1,4 +1,4 @@
-AutoSummary
+## AutoSummary
 
 This code generates a summary of a given text by calculating the frequency of words and scoring sentences based on the frequency of words. It uses NLTK to tokenize the text and remove stopwords, and heapq to extract the top sentences based on their scores.
 
