@@ -45,18 +45,18 @@ with open(output_csv_file, 'w', newline='') as file:
 
 print(f"Standardized customer data saved to {output_csv_file}")
 
-# Print the first 5 customer records
-for i in range(5):
-    print(f"Customer {i + 1}:")
-    print("CustomerID:", customer_data[i]["CustomerID"])
-    print("FirstName:", customer_data[i]["FirstName"])
-    print("LastName:", customer_data[i]["LastName"])
-    print("Email:", customer_data[i]["Email"])
-    print("PhoneNumber:", customer_data[i]["PhoneNumber"])
-    print("Birthday:", customer_data[i]["Birthday"])
-    print("Address:", customer_data[i]["Address"])
-    print("City:", customer_data[i]["City"])
-    print("State:", customer_data[i]["State"])
-    print("ZipCode:", customer_data[i]["ZipCode"])
-    print("Age:", customer_data[i]["Age"])
-    print()
+# Print the first 5 customer records. (just to comfirm to data)
+# for i in range(5):
+#     print(f"Customer {i + 1}:")
+#     print("CustomerID:", customer_data[i]["CustomerID"])
+#     print("FirstName:", customer_data[i]["FirstName"])
+#     print("LastName:", customer_data[i]["LastName"])
+#     print("Email:", customer_data[i]["Email"])
+#     print("PhoneNumber:", customer_data[i]["PhoneNumber"])
+#     print("Birthday:", customer_data[i]["Birthday"])
+#     print("Address:", customer_data[i]["Address"])
+#     print("City:", customer_data[i]["City"])
+#     print("State:", customer_data[i]["State"])
+#     print("ZipCode:", customer_data[i]["ZipCode"])
+#     print("Age:", customer_data[i]["Age"])
+#     print()
