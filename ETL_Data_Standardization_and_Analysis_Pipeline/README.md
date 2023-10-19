@@ -1,8 +1,9 @@
+# ETL Data Standardization and Analysis Pipeline 
 I create an ETL pipeline to extract, transform, and load customer data from a CSV file into a database. This project simulates a common real-world scenario where need to process and store customer information.
 
 Steps to Implement:
 
-Data Extraction (E):
+## Data Extraction (E):
 1. Write a Python script named "fake_customer_generater.py" that generates a synthetic customer dataset and saves it to a CSV file. (No need in real situation)
    ```ruby
    import csv
@@ -89,7 +90,7 @@ Data Extraction (E):
   ```
 
 
-Data Transformation (T):
+## Data Transformation (T):
 1. Perform data cleansing and transformation. Including tasks like handling missing values, standardizing formats, and generating derived features.
 2. In the script "customer_data_loader.py", I add some code snippets to implement data cleansing like standardizing phone number formats and calculate customer's age.
    ```ruby
@@ -159,7 +160,7 @@ Data Transformation (T):
    print(f"Standardized customer data saved to {output_csv_file}")
    ```
 
-Data Loading (L):
+## Data Loading (L):
 1. Set up a PostgreSQL database named CustomerInsightsDB using Mac terminal by following steps:  
   1.`brew install postgresql`  
   2.`brew services start postgresql`  
@@ -168,7 +169,132 @@ Data Loading (L):
 2. Install psycopg2 library to interact with PostgreSQL from Python:  
 `pip install psycopg2`
 3. Write a Python script named "etl_to_postgres.py" to connect to the PostgreSQL database and insert the standardized data.
-4. Create a table schema to store the customer data.
-5. Write a Python script to insert the transformed data into the database.
+```ruby
+import csv
+import re
+from datetime import datetime
+import psycopg2
 
-Data Analysis and Visualization:
+# Database connection parameters
+db_params = {
+    "dbname": "CustomerInsightsDB",
+    "user": "yourusername",      # Replaced with the fake PostgreSQL username
+    "password": "yourpassword",  # Replaced with the fake PostgreSQL password
+    "host": "localhost",         # Use "localhost" to connect to the local PostgreSQL instance
+}
+
+# Define the input CSV file path
+csv_file = 'standardized_customer_data.csv'
+
+# Read data from the CSV file
+with open(csv_file, 'r', newline='') as file:
+    reader = csv.DictReader(file)
+    customer_data = list(reader)
+
+# Connect to the PostgreSQL database
+conn = psycopg2.connect(**db_params)
+
+# Create a cursor object
+cur = conn.cursor()
+
+# Insert data into the PostgreSQL database
+for row in customer_data:
+    cur.execute("""
+        INSERT INTO customer_data (CustomerID, FirstName, LastName, Email, PhoneNumber, Birthday, Address, City, State, ZipCode, Age)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """, (
+        row["CustomerID"], row["FirstName"], row["LastName"], row["Email"], row["PhoneNumber"],
+        row["Birthday"], row["Address"], row["City"], row["State"], row["ZipCode"], row["Age"]
+    ))
+
+# Commit the changes and close the cursor and connection
+conn.commit()
+cur.close()
+conn.close()
+
+print(f"Data loaded into PostgreSQL database")
+```
+4. Base on the script above, I enhance its Security, Error Handling and Logging:  
+   **Security:**  
+   Storing sensitive information like database usernames and passwords in the script directly is not a good practice.
+   Instead of hardcoding them in the script, it's better to use environment variables or a configuration file to store
+   such information. This helps keep my credentials secure and separate from the code.  
+
+   **Error Handling:**  
+   It's a good practice to include error handling in the code. In a real-world scenario, things might not always go
+   smoothly. Therefore, include try-except blocks to catch and handle exceptions that might occur during the database
+   connection and data insertion processes is important.  
+
+   **Logging:**  
+   Consider implementing proper logging to record what's happening during the execution of my script. This can be
+   helpful for debugging and monitoring.
+
+
+   ```ruby
+   import csv
+   import re
+   from datetime import datetime
+   import psycopg2
+   import os
+   import logging
+
+   export DB_USERNAME = *********     # Replace with the real username here
+   export DB_PASSWARD = *********     # Replace with the real password here
+
+   # Database connection parameters
+   db_params = {
+       "dbname": "CustomerInsightsDB",
+       "user": os.environ.get("DB_USERNAME"),   
+       "password": os.environ.get("DB_PASSWORD"),  
+       "host": "localhost",      # Use "localhost" to connect to the local PostgreSQL instance
+   }
+
+   # Define the input CSV file path
+   csv_file = 'standardized_customer_data.csv'
+
+   # Configure logging
+   logging.basicConfig(filename = 'database_insert.log', level = logging.INFO)
+
+   try:
+       # Read data from the CSV file
+       with open(csv_file, 'r', newline='') as file:
+           reader = csv.DictReader(file)
+           customer_data = list(reader)
+
+       # Connect to the PostgreSQL database
+       conn = psycopg2.connect(**db_params)
+
+       # Create a cursor object
+       cur = conn.cursor()
+   
+       # Insert data into the PostgreSQL database
+       for row in customer_data:
+           cur.execute("""
+               INSERT INTO customer_data (CustomerID, FirstName, LastName, Email, PhoneNumber, Birthday, Address, City, State, ZipCode, Age)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+               row["CustomerID"], row["FirstName"], row["LastName"], row["Email"], row["PhoneNumber"],
+               row["Birthday"], row["Address"], row["City"], row["State"], row["ZipCode"], row["Age"]
+           ))
+
+       # Commit the changes and close the cursor and connection
+       conn.commit()
+       cur.close()
+       conn.close()
+
+       print(f"Data loaded into PostgreSQL database")
+       logging.info("Data loaded into PostgreSQL database")
+
+   except psycopg2.Error as e:
+       logging.error(f"Database error: {e}")
+       print(f"Error: {e}")
+       
+   except Exception as e:
+       logging.error(f"An unexpected error occurred: {e}")
+       print(f"An unexpected error occurred: {e}")
+   ```
+   
+7. Create a table schema to store the customer data.
+8. Write a Python script to insert the transformed data into the database.
+
+## Data Analysis and Visualization:
