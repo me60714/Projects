@@ -1,7 +1,9 @@
 # ETL Data Standardization and Analysis Pipeline 
 I create an ETL pipeline to extract, transform, and load customer data from a CSV file into a database. This project simulates a common real-world scenario where need to process and store customer information.
 
-Steps to Implement:
+Futhermore, I can analysis these data by using SQL queries or even using data visualization tools or libraries in Python, such as Matplotlib, Seaborn, or Plotly, to create charts and graphs that help visualize the data.
+
+Steps how I Implement:
 
 ## Data Extraction (E):
 1. Write a Python script named "fake_customer_generater.py" that generates a synthetic customer dataset and saves it to a CSV file. (No need in real situation)
