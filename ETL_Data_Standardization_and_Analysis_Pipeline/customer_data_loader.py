@@ -2,6 +2,7 @@ import csv
 import re
 from datetime import datetime
 
+
 # Define the input and output CSV file paths
 csv_file = 'customer_data.csv'
 output_csv_file = 'standardized_customer_data.csv'
@@ -21,7 +22,7 @@ with open(csv_file, 'r', newline='') as file:
         # Update the phone number in the row
         row["PhoneNumber"] = phone_number
         
-# Calculate the customer's age based on their birthday
+        # Calculate the customer's age based on their birthday
         birthday = datetime.strptime(row["Birthday"], "%Y-%m-%d")
         today = datetime.today()
         # Add the "Age" column
