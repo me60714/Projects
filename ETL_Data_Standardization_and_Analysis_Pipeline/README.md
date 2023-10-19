@@ -5,7 +5,7 @@ Steps to Implement:
 
 ## Data Extraction (E):
 1. Write a Python script named "fake_customer_generater.py" that generates a synthetic customer dataset and saves it to a CSV file. (No need in real situation)
-   ```ruby
+   ```python
    import csv
    import random
    import faker
@@ -43,7 +43,7 @@ Steps to Implement:
    print(f"Generated {num_records} customer records and saved to {csv_file}")
    ```
 2. Write a Python script named "customer_data_loader.py" to read data from the CSV file.
-  ```ruby
+  ```python
   import csv
 
   # Define the input CSV file paths
@@ -89,11 +89,10 @@ Steps to Implement:
       print()
   ```
 
-
 ## Data Transformation (T):
 1. Perform data cleansing and transformation. Including tasks like handling missing values, standardizing formats, and generating derived features.
 2. In the script "customer_data_loader.py", I add some code snippets to implement data cleansing like standardizing phone number formats and calculate customer's age.
-   ```ruby
+   ```python
        # Standardize the phone number format
         phone_number = row["PhoneNumber"]
         # Remove non-numeric characters
@@ -110,7 +109,7 @@ Steps to Implement:
         row["Age"] = age
    ```
    and after adding the snippets and modify the script, it becomes like:
-   ```ruby
+   ```python
    import csv
    import re
    from datetime import datetime
@@ -169,7 +168,7 @@ Steps to Implement:
 2. Install psycopg2 library to interact with PostgreSQL from Python:  
 `pip install psycopg2`
 3. Write a Python script named "etl_to_postgres.py" to connect to the PostgreSQL database and insert the standardized data.
-```ruby
+```python
 import csv
 import re
 from datetime import datetime
@@ -230,7 +229,7 @@ print(f"Data loaded into PostgreSQL database")
    helpful for debugging and monitoring.
 
 
-   ```ruby
+   ```python
    import csv
    import re
    from datetime import datetime
@@ -238,8 +237,9 @@ print(f"Data loaded into PostgreSQL database")
    import os
    import logging
 
-   export DB_USERNAME = *********     # Replace with the real username here
-   export DB_PASSWARD = *********     # Replace with the real password here
+   # Set environment variables for database credentials
+   os.environ["DB_USERNAME"] = "*********"  # Replace with the real username here
+   os.environ["DB_PASSWORD"] = "*********"  # Replace with the real password here
 
    # Database connection parameters
    db_params = {
@@ -294,7 +294,31 @@ print(f"Data loaded into PostgreSQL database")
        print(f"An unexpected error occurred: {e}")
    ```
    
-7. Create a table schema to store the customer data.
-8. Write a Python script to insert the transformed data into the database.
+5. Create a table schema to store the customer data.
+   Open the PostgreSQL shell by running the following command in the terminal:
+   ```command
+   psql -d CustomerInsightsDB
+   ```
+   Grant the necessary permissions to the username
+   ```sql
+   GRANT INSERT, SELECT ON TABLE customer_data TO *********;  # Replace with the real username here
+   ```
+   execute the SQL command to create the "customer_data" table:  
+   ```sql
+   CREATE TABLE customer_data (
+    CustomerID SERIAL PRIMARY KEY,
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
+    Email VARCHAR(255),
+    PhoneNumber VARCHAR(30),
+    Birthday DATE,
+    Address VARCHAR(255),
+    City VARCHAR(255),
+    State VARCHAR(2),
+    ZipCode VARCHAR(10),
+    Age INT
+   );
+   ```
+6. Use the command `python etl_to_postgres.py` to load data into PosgreSQL database.
 
-## Data Analysis and Visualization:
+## Data Analysis:
